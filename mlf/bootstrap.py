@@ -38,3 +38,4 @@ def main(model_name, *args, **kwargs):
         print("TypeError: Do you have the right " +
               "number of arguments for `%s`? >> %s" %
               (model_name, err))
+

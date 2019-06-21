@@ -1,6 +1,7 @@
 import sys
 import inspect
 import importlib
+import pandas as pd
 
 
 CLI = 'cli'
@@ -11,11 +12,11 @@ class MlfBase:
     LOAD_MODULE = None
 
     def execute(self, *args):
-        loaded = []
+        loaded = None
         
+        # this should consider the arguments it has,
+        # but fill in the rest with the next available arguments (data.py)
         if args:
-            # args should be read as variables, 
-            # unless '--' arg is found, then all files
             is_file = False
             load_args = []
 
@@ -25,9 +26,10 @@ class MlfBase:
                     continue
 
                 if is_file:
-                    load_args.append(open(arg, 'r'))
+                    load_args.append(pd.read_csv(arg))
                 else:
                     load_args.append(arg)
+
             loaded = self.load(*load_args)
 
         else:
@@ -61,3 +63,4 @@ class MlfBase:
     def load(self, *args, **kwargs):
         """ load your data set. if not instantiated, original arguments will be passed. """
         return args
+
