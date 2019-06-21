@@ -93,7 +93,7 @@ class YourModel:
 
 ### LOAD_MODULE
 
-Lastly, you can specify the module you want the data to be pulled from.
+Lastly, if you wish to have more choices over `data.py` you can specify the module you want the data to be pulled from.
 
 ```
 import your_data
@@ -105,17 +105,16 @@ class YourModel(MlfBase):
         pass
 ```
 
+# caching `load`
+
+# considerations
 
 * data set separation
-* running 
+* *running*
 * encapsulation
 * testing
 * telemetry
 * deployment
-
-
-
-## load
 
 ## play
 
@@ -125,7 +124,6 @@ class YourModel(MlfBase):
 
 ## predict
 
+## visualize
 
-## ???
-
-`mlf whatever.model <(data) <(data2)
+look at output of load and try to auto generate? give levers?

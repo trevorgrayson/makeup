@@ -20,15 +20,24 @@ class MlfBase:
             is_file = False
             load_args = []
 
+            arg_desc = ["Found args:"]
+
             for arg in args:
                 if arg == '--':
                     is_file = True
                     continue
 
                 if is_file:
+                    arg_desc.append("<<file:%s>>" % arg)
                     load_args.append(pd.read_csv(arg))
                 else:
+                    arg_desc.append(arg)
                     load_args.append(arg)
+
+            out = " ".join(arg_desc)
+            print(out)
+            print("=" * len(out))
+            print('')
 
             loaded = self.load(*load_args)
 
@@ -42,6 +51,7 @@ class MlfBase:
             if loaded is None:
                 loaded = self.load(*args)
 
+        # TODO describe loaded data here.
         self.run(*loaded)
 
 
@@ -64,3 +74,14 @@ class MlfBase:
         """ load your data set. if not instantiated, original arguments will be passed. """
         return args
 
+
+    def run(self, *args, **kwargs):
+        print('')
+        print("===============================================")
+        print("Implement the run method on your MlfBase model.")
+        print("Presently your are loading %s variables:")
+
+        # describe variables
+
+    def console(self, *args):
+        pass

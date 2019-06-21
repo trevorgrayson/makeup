@@ -22,8 +22,8 @@ def get_class(model_name):
     try:
         return getattr(module, klass)
 
-    except AttributeError as err:
-        raise AttributeError("class not found in module")
+    except AttributeError as err: 
+        raise AttributeError("class not found in module: %s" % err.message)
 
 
 def main(model_name, *args, **kwargs):
@@ -32,9 +32,12 @@ def main(model_name, *args, **kwargs):
 
     try:
         model = Klass()
+
+        # check here if arg list is right length, no catch.
+        print("Passing args: %s" % " ".join(args))
         model.execute(*args)
 
-    except TypeError as err:
+    except TypeError as err: # TODO need to back off this error, too greedy
         print("TypeError: Do you have the right " +
               "number of arguments for `%s`? >> %s" %
               (model_name, err))
