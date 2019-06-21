@@ -1,5 +1,12 @@
 # Machine Learning Framework
 
+
+## getting started
+
+
+### data
+
+
 * data set separation
 * running 
 * encapsulation
@@ -19,3 +26,7 @@
 
 ## predict
 
+
+## ???
+
+`mlf whatever.model <(data) <(data2)

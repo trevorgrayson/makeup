@@ -1,20 +1,28 @@
+import sys
 import inspect
 import importlib
+
+
+CLI = 'cli'
 
 
 class MlfBase:
     
     LOAD_MODULE = None
 
-    def execute(self):
-        members = inspect.getargspec(self.run).args[1:]
-        #args = map(lambda name: globals()[name], members)
-        args = map(lambda name: getattr(self.load_module(), name)(), members)
-        
-        loaded = self.cached(*args)
+    def execute(self, *args):
+        if args:
+            loaded = self.load(*map(lambda f: open(f, 'r'), args))
 
-        if loaded is None:
-            loaded = self.load(*args)
+        else:
+            members = inspect.getargspec(self.run).args[1:]
+            #args = map(lambda name: globals()[name], members)
+            args = map(lambda name: getattr(self.load_module(), name)(), members)
+        
+            loaded = self.cached(*args)
+
+            if loaded is None:
+                loaded = self.load(*args)
 
         self.run(*loaded)
 
