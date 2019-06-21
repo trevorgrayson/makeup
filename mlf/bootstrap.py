@@ -9,6 +9,11 @@ def to_pascal_case(snake_str):
 
 
 def get_class(model_name):
+    model_name = model_name.replace('/','.')
+
+    if model_name.endswith('.py'):
+        model_name = model_name[:-3]
+
     module_path = model_name.split('.')
     klass = to_pascal_case(module_path[-1])
 
