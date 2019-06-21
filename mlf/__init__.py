@@ -1,13 +1,9 @@
-import inspect
+import models
+
+__all__ = [models.MlfBase]
 
 
-class MlfBase:
+class Runner:
 
-    def execute(self):
-        members = inspect.getargspec(self.run).args[1:]
-        #args = map(lambda name: globals()[name], members)
-        args = map(lambda name: getattr(self.LOAD_MODULE, name)(), members)
-        
-        loaded = self.load(*args)
-        self.run(*loaded)
-
+    def execute(self, model, *args):
+        pass
