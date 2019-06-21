@@ -93,6 +93,18 @@ class YourModel:
 
 ### LOAD_MODULE
 
+Lastly, you can specify the module you want the data to be pulled from.
+
+```
+import your_data
+
+class YourModel(MlfBase):
+    LOAD_MODULE = your_data
+
+    def run(self, from_your_data):
+        pass
+```
+
 
 * data set separation
 * running 
