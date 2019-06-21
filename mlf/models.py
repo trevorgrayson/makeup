@@ -11,8 +11,24 @@ class MlfBase:
     LOAD_MODULE = None
 
     def execute(self, *args):
+        loaded = []
+        
         if args:
-            loaded = self.load(*map(lambda f: open(f, 'r'), args))
+            # args should be read as variables, 
+            # unless '--' arg is found, then all files
+            is_file = False
+            load_args = []
+
+            for arg in args:
+                if arg == '--':
+                    is_file = True
+                    continue
+
+                if is_file:
+                    load_args.append(open(arg, 'r'))
+                else:
+                    load_args.append(arg)
+            loaded = self.load(*load_args)
 
         else:
             members = inspect.getargspec(self.run).args[1:]
