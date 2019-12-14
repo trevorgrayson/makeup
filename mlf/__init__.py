@@ -1,4 +1,4 @@
-import models
+from . import models
 
 __all__ = [models.MlfBase]
 

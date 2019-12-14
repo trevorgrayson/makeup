@@ -1,9 +1,7 @@
-compile:
-	pip install -r requirements.txt
+$(shell test -f Makef.io || curl -o Makef.io makef.io/python)
+include Makef.io
+-include projects.Makefile
 
-clean:
-	find .  -name *.pyc -delete
-	find .  -name *.sw* -delete
+PYTHON?=python3
+export PYTHONPATH = venv:.
 
-run:
-	python -m mlf projects.wx.metar

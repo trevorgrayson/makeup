@@ -79,7 +79,7 @@ class MlfBase:
         print('')
         print("===============================================")
         print("Implement the run method on your MlfBase model.")
-        print("Presently your are loading %s variables:")
+        print("Presently your are loading %s variables:" % len(args))
 
         # describe variables
 
