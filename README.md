@@ -127,3 +127,24 @@ class YourModel(MlfBase):
 ## visualize
 
 look at output of load and try to auto generate? give levers?
+
+## MLF Delegate
+
+Pick a module or notebook to delegate method calls to. 
+You may place this inline in a notebook to experiment
+with your notebook.
+
+
+```
+from mlf import delegate as mlf
+
+DATASET = 'some/data.tsv'
+
+def features(df):
+    ... do feature stuff
+    return features_df
+
+
+# change `features` to stage of your choosing.
+mlf.features(DATASET)
+```
