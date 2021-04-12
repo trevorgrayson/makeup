@@ -1,6 +1,4 @@
-import sys
 import importlib
-import logging
 
 
 def to_pascal_case(snake_str):
@@ -29,7 +27,6 @@ def get_class(model_name):
 def main(model_name, *args, **kwargs):
     Klass = get_class(model_name)
 
-
     try:
         model = Klass()
 
@@ -41,4 +38,3 @@ def main(model_name, *args, **kwargs):
         print("TypeError: Do you have the right " +
               "number of arguments for `%s`? >> %s" %
               (model_name, err))
-
