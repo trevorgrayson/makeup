@@ -1,4 +1,5 @@
 from . import models
+from .deps import target, default
 
 __all__ = [models.MlfBase]
 

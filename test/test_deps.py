@@ -13,5 +13,5 @@ class TestDeps:
         assert run(model, 'train') == (10, 'ollie')
 
     def test_default(self):
-        default(model)
+        default(model)  # TODO need to init this somewhere
         assert run(model, 'train') == (10, 'ollie')
