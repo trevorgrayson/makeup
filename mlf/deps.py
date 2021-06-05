@@ -1,6 +1,9 @@
 #
 # Put functions into DEPS as key, put deps in values
 #
+from mlf.url_cache import cache_by_url
+
+
 DEPS = {}
 
 
@@ -14,14 +17,21 @@ def run(model, verb, *args, **kwargs):
     run required preconditions,
     and then execute verb.
     """
+    RUNNER = run
+    url = kwargs.get('url_cache')
+    if url:
+        RUNNER = cache_by_url
+
     if isinstance(verb, str):
         verb = getattr(model, verb)
     if verb is None:
         raise Exception(f"{model} does not have method {verb}")
     exec_stack = []
 
+    # TODO this doesn't cache for last method.
+    #  use run(verb, *args, **kwargs)
     if verb in DEPS:
-        return verb(run(model, DEPS[verb], *args, **kwargs),
+        return verb(RUNNER(model, DEPS[verb], *args, **kwargs),
                     *args, **kwargs)  # reconsider
     return verb(*args, **kwargs)
 
