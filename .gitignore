@@ -108,3 +108,5 @@ projects
 *.sw*
 
 test/fixtures/cache_miss
+.venv-idea
+.idea
