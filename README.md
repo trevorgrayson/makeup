@@ -1,150 +1,137 @@
-# Machine Learning Framework
+# MLF Dependency Framework
+
+Run Machine Learning/AI models, reproducibly, from ideation to production.
+
+MLF strives to help Data Scientists write model code and not be obliged to much else.
+MLF is the connective tissue that plugs the different stages of building a model together.
+
+This is not a processor library, it's a code organizational framework made to make your development easier.
+
+Additional features may be developed in this library to provide services, like a web API to host models. 
+
+# Why?
+
+- write less code.
+- promote a "model interface" for interoperable models.
+- target caching for reproducible and expedient execution. 
+- simplified debugging, without hacking code.
+- production deployable code that's easy to test.
+- artifact rendering, to help with deployments.  
 
 
+## How?
 
-## reading data
+We're going to try to break our ML code down into smaller functional parts.  These parts will be simple python functions,
+and we will refer to them as targets.  How big should we make these targets?  A good rule of thumb is to make a new 
+target anywhere you may want to `print`, save, or inspect variables or results.  
 
-It's important for you to be agile with your data sources. MLF provides several 
-ways of importing data.
+Some example targets may be: `load`, `prep` (or `feature` generation), `split`, `train`
 
-### cli
+## Getting Started
 
-Any additional arguments that you pass to MLF will be preferred first as arguments.
-The first argument you name for `load` or `run` will trump all other sources and 
-come from these arguments.
+Take an ML project, like the [Sklearn Iris Example](https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html).
+Let's start by making a module called `iris` to name our model.  The following code will be added to `iris/__init__.py`.
 
-```
-    python -m mlf 123
-```
+### loading data
 
-will translate into
+No matter what you're doing, you'll want to load some data first.  I'm hard pressed to find a example where 
+the program should hardcode the data source in the code, but this seems to happen in every jupyter notebook I've ever 
+seen, so let's write a method to do it.  This will be our default data, but you will be able to change data 
+sources/sets at run time.
 
-```
-class YourModel(MlfBase):
-    def run(self, one_two_three):
-```
+To implement that here we will use the `dataset.load_iris` function. Keep in mind, this block of code could just as
+easily load a csv, call a database, or load any other data source. More on this later. 
 
-#### files
+```python
+# iris/__init__.py
+from sklearn import datasets
 
-On the command line, all arguments after `--` will be interpreted as files, and 
-read in as `panda` csvs.
+def load():
+    """Returns reasonable "default data" for executon. Use in Juypter Notebooks.""" 
+    iris = datasets.load_iris()
+    return iris.data[:, :2], iris.target
 
-```
-    python -m mlf 123 -- data.csv
-```
-
-### data.py module
-
-After the preceeding sources, the source for arguments will be the
-`data.py` file which is next to your model file in the same module.
-
-```
-|-> data.py
-|-> your_model.py
-```
-
-`data.py` will be loaded, and it will find methods or varibles by using the
-name of the variable in your method.
-
-```
-# data.py
-# -------
-
-def some_data():
-    for data in datum:
-      yield data
-
-def other_data():
-    return 1
-
-# your_model.py
-# -------------
-class YourModel(MlfBase):
-
-    def run(self, some_data, other_data):
-        pass
+# load = "data/yourdataset.tsv"
 ```
 
-## loading data
+The Iris Example is loading an object and extracts two useful components from it:  
+a data frame, and target numbers.
 
-Frequently the data you read isn't in the format your model needs it to be in.
-This is where the `load` method comes in.
+Notice the loaded `iris` variable wasn't returned, though it could've been.  By returning a generic tuple of 
+python primatives you can avoid coupling your code to a data object. By explicitly stating your data requirements 
+in the function's arguments, it will make it much easier to plug in different data sources, and
+unit test method separately.
 
-The `load` method is reserved for taking in your data arguments and transforming them 
-into the specification that your model needs.
+### training on data
 
-`load` will receive arguments exactly as run would (stated above), and whatever it returns will 
-be directly fed to the run method.
+Now that you have your data, you will want to train your model against it.
+Rather than procedurally continuing our code, let's make another method which takes the previous
+function's returned values. Let's name those returned values sensibly: `data` and `target`. 
 
+```python
+def train(data, target):
+    """
+    Further describing the inputs here will help later.
+    data: a DataFrame with x, y, z column requirements.
+    target: a list of numbers
+    """
+    clf = SVC()
+    clf.fit(data, target)
 
-```
-class YourModel:
-
-    def load(self, some_data, other_data):
-        some_join_other = zip(some_data, other_data)
-
-        return (some_join_other, ['weird', 'array', 'i', 'made', 'up'])
-    
-    def run(self, some_join_other, weird):
-        # do things!
-        pass
-
-```
-
-### LOAD_MODULE
-
-Lastly, if you wish to have more choices over `data.py` you can specify the module you want the data to be pulled from.
-
-```
-import your_data
-
-class YourModel(MlfBase):
-    LOAD_MODULE = your_data
-
-    def run(self, from_your_data):
-        pass
+    return clf
 ```
 
-# caching `load`
+### prediction
 
-# considerations
+You have your `SVC` model at this point.  Here we finish up with making a prediction.
 
-* data set separation
-* *running*
-* encapsulation
-* testing
-* telemetry
-* deployment
+```python
+def predict(clf, row):
+    return clf.predict(row)
+```
 
-## play
+This is using a generic row like our example is, but getting more explicit with your parameters may suit you better.
 
-## train
 
-## evaluate
+## Running the code...
 
-## predict
+We've defined three methods: `load`, `train`, and `predict`.  There are implicit dependencies between these functions 
+which we could write some code to execute, but that's where `MLF` comes in.
 
-## visualize
+### in a notebook
 
-look at output of load and try to auto generate? give levers?
+```python
+import iris
+from mlf import run, target
 
-## MLF Delegate
+target(iris.train, requires=iris.load)
+run(iris, 'train')
+```
 
-Pick a module or notebook to delegate method calls to. 
-You may place this inline in a notebook to experiment
-with your notebook.
+On the command line, this could be executed with:
 
+```sh
+python -m mlf iris train
+```
+
+You could imagine dependencies getting more intricate:
+
+```python
+from mlf import target
+import iris
+
+target(iris.features, requires=iris.load)
+target(plot, requires=iris.features)
+
+target(iris.split, requires=iris.features)
+target(iris.train, requires=iris.split)
+```
 
 ```
-from mlf import delegate as mlf
-
-DATASET = 'some/data.tsv'
-
-def features(df):
-    ... do feature stuff
-    return features_df
-
-
-# change `features` to stage of your choosing.
-mlf.features(DATASET)
+load -> features |-> plot
+                 \-> split -> train
 ```
+
+
+
+
