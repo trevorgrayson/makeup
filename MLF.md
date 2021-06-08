@@ -1,66 +1,83 @@
 # MLF Dependency Framework
 
-Run your models, reproducibly, from ideation to production.
+Run Machine Learning/AI models, reproducibly, from ideation to production.
 
-MLF strives to have Data Scientists write model code and not have to write much else.
-MLF is the connective tissue that plugs the different stages together.
+MLF strives to help Data Scientists write model code and not be obliged to much else.
+MLF is the connective tissue that plugs the different stages of building a model together.
 
 This is not a processor library, it's a code organizational framework made to make your development easier.
 
-Additional features may be developed to provide services, like a web API. 
+Additional features may be developed in this library to provide services, like a web API to host models. 
 
 # Why?
 
 - write less code.
-- have a "model interface" to help you swap models.
-- It caches results to make them reproducible and expedient. 
-- It will renders artifacts.  This helps with deployments.  
+- have a "model interface" for interoperable models.
+- target caching for reproducible and expedient execution. 
+- artifact rendering, to help with deployments.  
 
 
+## How?
+
+We're going to try to break our ML code down into smaller functional parts.  These parts will be simple python functions,
+and we will refer to them as targets.  How big should we make these targets?  A good rule of thumb is to make a new 
+target anywhere you may want to `print`, save, or inspect variables or results.  
+
+Some example targets may be: `load`, `prep` (or `feature` generation), `split`, `train`
 
 ## Getting Started
 
 Take an ML project, like the [Sklearn Iris Example](https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html).
-We're going to try to break that code down a bit.
-
-Let's start by making a module called `iris` to name this model.  The following code will be added to `iris/__init__.py`.
+Let's start by making a module called `iris` to name our model.  The following code will be added to `iris/__init__.py`.
 
 ### loading data
 
-No matter what you're doing, you'll want to load some data first.  I'm hard pressed to find a example where the program should hardcode the data source in the
-code.  This is done in every jupyter notebook I've even seen though, so let's write a method to do it.  This will be our 
-default data, but you will be able to define data sources/sets at run time.
+No matter what you're doing, you'll want to load some data first.  I'm hard pressed to find a example where 
+the program should hardcode the data source in the code, but this seems to happen in every jupyter notebook I've ever 
+seen, so let's write a method to do it.  This will be our default data, but you will be able to change data 
+sources/sets at run time.
 
-To implement that here we will use the `dataset.load_iris` function, but you should be able to pass a csv, database call, 
-or any other data source at execution time. More on that later. 
+To implement that here we will use the `dataset.load_iris` function. Keep in mind, this block of code could just as
+easily load a csv, call a database, or load any other data source. More on this later. 
 
-`# iris/__init__.py`
+```python
+# iris/__init__.py
+from sklearn import datasets
 
-```python 
 def load():
     """Returns reasonable "default data" for executon. Use in Juypter Notebooks.""" 
     iris = datasets.load_iris()
-    return (iris.data[:, :2], iris.target, iris.target_names)
+    return iris.data[:, :2], iris.target
 
 # load = "data/yourdataset.tsv"
 ```
+
+The Iris Example is loading an object and extracts two useful components from it:  
+a data frame, and target numbers.
+
+Notice the loaded `iris` variable wasn't returned, though it could've been.  By returning a generic tuple of 
+python primatives you can avoid coupling your code to a data object. By explicitly stating your data requirements 
+in the function's arguments, it will make it much easier to plug in different data sources, and
+unit test method separately.
+
 ### training on data
 
 Now that you have your data, you will want to train your model against it.
-Rather than procedurally continuing our code, let's make another method.
+Rather than procedurally continuing our code, let's make another method which takes the previous
+function's returned values. Let's name those returned values sensibly: `data` and `target`. 
 
 ```python
-def train(data, target, target_names):
+def train(data, target):
+    """
+    Further describing the inputs here will help later.
+    data: a DataFrame with x, y, z column requirements.
+    target: a list of numbers
+    """
     clf = SVC()
     clf.fit(data, target)
-    clf.fit(data, target_names[target])
 
     return clf
 ```
-
-Notice the loaded `iris` variable wasn't passed, though it could be.  By returning a generic tuple or python primatives 
-between these methods you can avoid coupling your code to a data object. By explicitly stating your data requirements in the 
-function's arguments, it will make it much easier to unit test this method or plug in different data sources.
 
 ### prediction
 
@@ -83,17 +100,34 @@ which we could write some code to execute, but that's where `MLF` comes in.
 
 ```python
 import iris
-from mlf import run, default_workflow
-default_workflow(iris)
+from mlf import run, target
+
+target(iris.train, requires=iris.load)
 run(iris, 'train')
 ```
 
-On the command line, this would be:
+On the command line, this could be executed with:
 
 ```sh
 python -m mlf iris train
 ```
 
+You could imagine dependencies getting more intricate:
+
+```python
+import iris
+
+target(iris.features, requires=iris.load)
+target(plot, requires=iris.features)
+
+target(iris.split, requires=iris.features)
+target(iris.train, requires=iris.split)
+```
+
+```
+load -> features |-> plot
+                 \-> split -> train
+```
 
 
 

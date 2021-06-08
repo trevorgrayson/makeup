@@ -1,5 +1,6 @@
 import importlib
 from mlf.deps import run, default
+from inspect import isfunction, getfullargspec
 
 
 def to_pascal_case(snake_str):
@@ -7,7 +8,7 @@ def to_pascal_case(snake_str):
     return ''.join(x.title() for x in comp)
 
 
-def get_module(model_name, target):
+def get_module(model_name):
     """
     get_module
     """
@@ -28,17 +29,24 @@ def get_module(model_name, target):
         raise AttributeError("class not found in module: %s" % err.message)
 
 
-def main(model_name, target, *args, **kwargs):
-    model = get_module(model_name, target)
+def get_targets(module):
+    fns = filter(lambda m: isfunction(getattr(module, m)),
+                 dir(module))
+    return [f for f in fns]
 
-    workflow = getattr(model, 'workflow')
-    if workflow:
-        workflow(model)
-    else:
-        default(model)
+
+def target_args(fn):
+    spec = getfullargspec(fn)
+    return spec.args
+
+
+def main(model_name, target, *args, **kwargs):
+    model = get_module(model_name)
+    workflow = getattr(model, 'workflow', default)
+    workflow(model)
 
     # check here if arg list is right length, no catch.
     print("Passing args: %s (%s)" % (target, " ".join(args)))
-    result = run(model, target, *args)
+    result = run(model, target, *args, **kwargs)
 
     print(result)

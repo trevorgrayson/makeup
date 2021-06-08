@@ -31,10 +31,11 @@ def run(model, verb, *args, **kwargs):
     # TODO this doesn't cache for last method.
     #  use run(verb, *args, **kwargs)
     if verb in DEPS:
-        return verb(RUNNER(model, DEPS[verb], *args, **kwargs),
-                    *args, **kwargs)  # reconsider
+        result = RUNNER(model, DEPS[verb], *args, **kwargs)
+        if not hasattr(result, '__iter__'):
+            result = result,
+        return verb(*result, *args, **kwargs)  # reconsider
     return verb(*args, **kwargs)
-
 
 
 def default(model):

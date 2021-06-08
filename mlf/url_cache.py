@@ -1,4 +1,3 @@
-import urllib3
 import logging
 import pickle
 # TODO: switch to urllib3
