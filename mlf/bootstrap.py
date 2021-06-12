@@ -1,6 +1,9 @@
+import logging
 import importlib
 from mlf.deps import run, default
 from inspect import isfunction, getfullargspec
+
+# logging.basicConfig("")
 
 
 def to_pascal_case(snake_str):
@@ -18,7 +21,6 @@ def get_module(model_name):
         model_name = model_name[:-3]
 
     module_path = model_name.split('.')
-    # klass = to_pascal_case(module_path[-1])
 
     module = importlib.import_module(model_name)
 
@@ -46,7 +48,7 @@ def main(model_name, target, *args, **kwargs):
     workflow(model)
 
     # check here if arg list is right length, no catch.
-    print("Passing args: %s (%s)" % (target, " ".join(args)))
+    logging.info("Passing args: %s (%s)" % (target, " ".join(args)))
     result = run(model, target, *args, **kwargs)
 
     print(result)

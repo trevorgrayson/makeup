@@ -1,8 +1,10 @@
 #
 # Put functions into DEPS as key, put deps in values
 #
+import logging
 from mlf.url_cache import cache_by_url
 
+logging.basicConfig(level=logging.INFO)
 
 DEPS = {}
 
@@ -30,11 +32,14 @@ def run(model, verb, *args, **kwargs):
 
     # TODO this doesn't cache for last method.
     #  use run(verb, *args, **kwargs)
+    arg_types = list(map(type, args))
     if verb in DEPS:
         result = RUNNER(model, DEPS[verb], *args, **kwargs)
-        if not hasattr(result, '__iter__'):
+        if type(result) != tuple:  # tuples get splatted.
             result = result,
+        logging.info(f"Running {verb.__name__}({','.join(arg_types)})")
         return verb(*result, *args, **kwargs)  # reconsider
+    logging.info(f"Running {verb.__name__}({','.join(arg_types)})")
     return verb(*args, **kwargs)
 
 
