@@ -2,7 +2,7 @@
 # Put functions into DEPS as key, put deps in values
 #
 import logging
-from mlf.url_cache import cache_by_url
+from mlf.url_cache import cache_by_url, is_url, url_open
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,19 +21,27 @@ def run(model, verb, *args, **kwargs):
     """
     RUNNER = run
     url = kwargs.get('url_cache')
+
     if url:
         RUNNER = cache_by_url
 
     if isinstance(verb, str):
-        verb = getattr(model, verb)
-    if verb is None:
+        try:
+            verb = getattr(model, verb)
+        except AttributeError:
+            pass
+        if is_url(verb):
+            return url_open(verb)
+
+    if verb is None:  # BUG shouldn't be required if kwarg is passed
         raise Exception(f"{model} does not have method {verb}")
-    exec_stack = []
 
     # TODO this doesn't cache for last method.
     #  use run(verb, *args, **kwargs)
     arg_types = list(map(type, args))
     if verb in DEPS:
+        if DEPS[verb].__name__ in kwargs:
+            return url_open(kwargs[DEPS[verb].__name__])
         result = RUNNER(model, DEPS[verb], *args, **kwargs)
         if type(result) != tuple:  # tuples get splatted.
             result = result,

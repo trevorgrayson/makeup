@@ -1,14 +1,16 @@
 from mlf.url_cache import cache_by_url
 
-CACHE_PATH = 'test/fixtures'
+CACHE_PATH = 'file:./test/fixtures'
 
 
 def cache_miss():
     return [1, 2, 3]
 
+
 def precached():
     return [4, 5, 6]
     raise Exception("this test failed!")
+
 
 class TestUrlCache:
     def test_cache_by_url(self):

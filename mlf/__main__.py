@@ -12,7 +12,14 @@ parser.add_argument("target", type=str,
 # parser.add_argument(type="*nargs", dest="args",
 #                     help="arguments to be passed to starting function")
 # kwargs overflow goes to load method
+parser.add_argument("--load", type=str, dest='load', required=False,
+                    help="alternate data to load")
 args = parser.parse_args()
 
-main(args.model_name, args.target)
+kwargs = {}
+
+if args.load:
+    kwargs['load'] = args.load
+
+main(args.model_name, args.target, **kwargs)
 

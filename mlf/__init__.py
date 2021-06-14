@@ -1,7 +1,7 @@
 from . import models
-from .deps import target, default
+from .deps import target, default, run
 
-__all__ = [models.MlfBase]
+__all__ = [models.MlfBase, run]
 
 
 class Runner:
