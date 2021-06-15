@@ -24,6 +24,8 @@ def run(model, verb, *args, **kwargs):
     run required preconditions,
     and then execute verb.
     """
+    if isinstance(model, str):
+        model = __import__(model)
     RUNNER = run
     url = kwargs.get('url_cache')
     if url:
