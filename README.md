@@ -138,6 +138,20 @@ load -> features |-> plot
                  \-> split -> train
 ```
 
+OR, in abbreviated form:
+
+```python
+from makeup import workflow
+import examples.iris as iris
+
+workflow({
+    iris.features: iris.load,
+    plot: iris.features,
+    iris.split: iris.features,
+    iris.train: iris.split,
+})
+```
+
 
 
 

@@ -1,5 +1,5 @@
 from makeup.deps import DEPS, target, default, run
-from examples import example2 as model
+from examples import example1 as model
 
 
 class TestDeps:

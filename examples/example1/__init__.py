@@ -5,7 +5,8 @@ def load():
     """
     return [
         (1, 'ollie'),
-        (2, 'bobby')
+        (2, 'bobby'),
+        (3, 'alice')
     ]
 
 

@@ -13,6 +13,11 @@ def target(fn, requires, **kwargs):
     DEPS[fn] = requires
 
 
+def workflow(*dicts):
+    for d in dicts:
+        DEPS.update(d)
+
+
 def run(model, verb, *args, **kwargs):
     """
     take model and verb,

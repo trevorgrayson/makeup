@@ -16,11 +16,6 @@ class TestLoad:
         iou = data.read()
         assert iou[:2] == 'id'
 
-    def test_by_str_in_path(self):
-        data = mlf.load('examples.example1')
-        iou = data.read()
-        assert iou[:2] == 'id'
-
     def test_tsv_dataset(self):
         dataset = 'test/fixtures/data.tsv'
         data = mlf.load(__name__, dataset)
