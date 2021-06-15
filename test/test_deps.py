@@ -1,4 +1,4 @@
-from mlf.deps import DEPS, target, default, run
+from makeup.deps import DEPS, target, default, run
 from examples import example2 as model
 
 

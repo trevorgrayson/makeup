@@ -1,4 +1,4 @@
-from mlf.url_cache import cache_by_url
+from makeup.url_cache import cache_by_url
 
 CACHE_PATH = 'file:./test/fixtures'
 

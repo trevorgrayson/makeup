@@ -2,7 +2,7 @@
 # Put functions into DEPS as key, put deps in values
 #
 import logging
-from mlf.url_cache import cache_by_url, is_url, url_open
+from makeup.url_cache import cache_by_url, is_url, url_open
 
 logging.basicConfig(level=logging.INFO)
 
@@ -40,9 +40,10 @@ def run(model, verb, *args, **kwargs):
     #  use run(verb, *args, **kwargs)
     arg_types = list(map(type, args))
     if verb in DEPS:
-        if DEPS[verb].__name__ in kwargs:
-            return url_open(kwargs[DEPS[verb].__name__])
-        result = RUNNER(model, DEPS[verb], *args, **kwargs)
+        dep = DEPS[verb]
+        if callable(dep) and dep.__name__ in kwargs:
+            return url_open(kwargs[dep.__name__])
+        result = RUNNER(model, dep, *args, **kwargs)
         if type(result) != tuple:  # tuples get splatted.
             result = result,
         logging.info(f"Running {verb.__name__}({','.join(arg_types)})")

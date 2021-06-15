@@ -2,7 +2,7 @@
 
 import sys
 from argparse import ArgumentParser
-from mlf.bootstrap import main
+from makeup.bootstrap import main
 
 parser = ArgumentParser(description="Run your ML models.")
 parser.add_argument("model_name", type=str,

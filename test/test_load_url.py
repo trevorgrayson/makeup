@@ -1,4 +1,4 @@
-from mlf import run
+from makeup import run
 from examples import load_file
 
 

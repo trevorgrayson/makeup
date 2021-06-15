@@ -1,4 +1,4 @@
-from mlf import delegate as mlf
+from makeup import delegate as mlf
 
 
 def load():

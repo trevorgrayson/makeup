@@ -102,7 +102,7 @@ which we could write some code to execute, but that's where `MLF` comes in.
 
 ```python
 import iris
-from mlf import run, target
+from makeup import run, target
 
 target(iris.train, requires=iris.load)
 run(iris, 'train')
@@ -117,7 +117,7 @@ python -m mlf iris train
 You could imagine dependencies getting more intricate:
 
 ```python
-from mlf import target
+from makeup import target
 import iris
 
 target(iris.features, requires=iris.load)

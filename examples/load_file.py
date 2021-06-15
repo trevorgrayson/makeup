@@ -1,4 +1,4 @@
-from mlf import target
+from makeup import target
 
 # load = "file:./test/fixtures/data.tsv"
 load = "file:./test/fixtures/data.tsv"
