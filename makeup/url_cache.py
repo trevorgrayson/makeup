@@ -30,7 +30,11 @@ def is_url(string):
 
 
 def depickle(data):
-    decoded = data.read().decode(ENCODING)
+    decoded = data.read()
+    try:  # TODO reconsider
+        decoded = decoded.decode(ENCODING)
+    except UnicodeDecodeError:
+        pass
     return SERIALIZER.loads(decoded)
 
 
