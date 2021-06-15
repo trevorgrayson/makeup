@@ -1,4 +1,4 @@
-# MLF Dependency Framework
+# makeup Dependency Framework
 
 Run Machine Learning/AI models, reproducibly, from ideation to production.
 
@@ -114,11 +114,17 @@ On the command line, this could be executed with:
 python -m mlf iris train
 ```
 
+You may also [override](docs/OVERRIDES.md) the data source with a URL.
+
+```sh
+python -m mlf iris train --load file://./data.csv
+``` 
+
 You could imagine dependencies getting more intricate:
 
 ```python
 from makeup import target
-import iris
+import examples.iris as iris
 
 target(iris.features, requires=iris.load)
 target(plot, requires=iris.features)
