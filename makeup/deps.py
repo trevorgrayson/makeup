@@ -21,7 +21,6 @@ def run(model, verb, *args, **kwargs):
     """
     RUNNER = run
     url = kwargs.get('url_cache')
-
     if url:
         RUNNER = cache_by_url
 
@@ -42,8 +41,9 @@ def run(model, verb, *args, **kwargs):
     if verb in DEPS:
         dep = DEPS[verb]
         if callable(dep) and dep.__name__ in kwargs:
-            return url_open(kwargs[dep.__name__])
-        result = RUNNER(model, dep, *args, **kwargs)
+            result = url_open(kwargs[dep.__name__])
+        else:
+            result = RUNNER(model, dep, *args, **kwargs)
         if type(result) != tuple:  # tuples get splatted.
             result = result,
         logging.info(f"Running {verb.__name__}({','.join(arg_types)})")
@@ -59,6 +59,9 @@ def default(model):
     train -> features
     features -> load
     """
-    target(model.features, requires=model.load)
-    target(model.train, requires=model.features)
-    target(model.predict, requires=model.train)
+    if hasattr(model, 'features'):
+        target(model.features, requires=model.load)
+    if hasattr(model, 'train'):
+        target(model.train, requires=model.features)
+    if hasattr(model, 'predict'):
+        target(model.predict, requires=model.train)
