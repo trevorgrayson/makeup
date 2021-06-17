@@ -1,6 +1,6 @@
 import logging
 import importlib
-from makeup.deps import run, default
+from obviate.deps import run, default
 from inspect import isfunction, getfullargspec
 
 # logging.basicConfig("")

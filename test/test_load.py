@@ -1,4 +1,4 @@
-from makeup import delegate as mlf
+from obviate import delegate as obv
 
 
 def load():
@@ -12,13 +12,13 @@ def load():
 class TestLoad:
     def test_this(self):
         """delegate to this file (see above)"""
-        data = mlf.load(__name__)
+        data = obv.load(__name__)
         iou = data.read()
         assert iou[:2] == 'id'
 
     def test_tsv_dataset(self):
         dataset = 'test/fixtures/data.tsv'
-        data = mlf.load(__name__, dataset)
+        data = obv.load(__name__, dataset)
         iou = data.read()
         assert iou[:2] == 'id'
 

@@ -1,4 +1,4 @@
-from makeup import delegate as mlf
+from obviate import delegate as obv
 
 
 def load():
@@ -19,5 +19,5 @@ class TestFeatures:
         delegate to this file (see above)
         looking up by module name
         """
-        feats = mlf.features(__name__)
+        feats = obv.features(__name__)
         assert feats.read()[:2] == 'id'

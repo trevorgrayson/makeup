@@ -2,7 +2,7 @@
 # Put functions into DEPS as key, put deps in values
 #
 import logging
-from makeup.url_cache import cache_by_url, is_url, url_open
+from obviate.url_cache import cache_by_url, is_url, url_open
 
 logging.basicConfig(level=logging.INFO)
 

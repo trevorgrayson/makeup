@@ -1,5 +1,5 @@
 from urllib import request
-from makeup.urlregistry.sqlite import SQLiteHandler
+from obviate.urlregistry.sqlite import SQLiteHandler
 from pickle import load
 
 opener = request.build_opener(SQLiteHandler())

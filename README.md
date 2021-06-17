@@ -1,9 +1,9 @@
-# makeup Dependency Framework
+# obviate Dependency Framework
 
 Run Machine Learning/AI models, reproducibly, from ideation to production.
 
-MLF strives to help Data Scientists write model code and not be obliged to much else.
-MLF is the connective tissue that plugs the different stages of building a model together.
+Obviate strives to help Data Scientists write model code and not be obliged to much else.
+Obviate is the connective tissue that plugs the different stages of building a model together.
 
 This is not a processor library, it's a code organizational framework made to make your development easier.
 
@@ -96,13 +96,13 @@ This is using a generic row like our example is, but getting more explicit with 
 ## Running the code...
 
 We've defined three methods: `load`, `train`, and `predict`.  There are implicit dependencies between these functions 
-which we could write some code to execute, but that's where `MLF` comes in.
+which we could write some code to execute, but that's where `Obviate` comes in.
 
 ### in a notebook
 
 ```python
 import iris
-from makeup import run, target
+from obviate import run, target
 
 target(iris.train, requires=iris.load)
 run(iris, 'train')
@@ -111,19 +111,19 @@ run(iris, 'train')
 On the command line, this could be executed with:
 
 ```sh
-python -m mlf iris train
+python -m obviate iris train
 ```
 
 You may also [override](docs/OVERRIDES.md) the data source with a URL.
 
 ```sh
-python -m mlf iris train --load file://./data.csv
+python -m obviate iris train --load file://./data.csv
 ``` 
 
 You could imagine dependencies getting more intricate:
 
 ```python
-from makeup import target
+from obviate import target
 import examples.iris as iris
 
 target(iris.features, requires=iris.load)
@@ -141,7 +141,7 @@ load -> features |-> plot
 OR, in abbreviated form:
 
 ```python
-from makeup import workflow
+from obviate import workflow
 import examples.iris as iris
 
 workflow({

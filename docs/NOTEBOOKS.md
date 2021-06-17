@@ -3,7 +3,7 @@
 Jupyter Notebooks and alike are first class citizens in this framework.
 
 ```python
-from makeup import workflow, run
+from obviate import workflow, run
 
 def load():
     """load data"""
