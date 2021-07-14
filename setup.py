@@ -7,7 +7,7 @@ README = (ROOTDIR / "README.md").read_text()
 
 
 setup(
-      name='obviate',
+      name='makeup',
       version='0.1.2',
       packages=setuptools.find_packages(),
       description='Make your models look pretty.',
@@ -16,11 +16,11 @@ setup(
       author='trevor grayson',
       author_email='trevor@dave.com',
       url='https://github.com/trevorgrayson/mlf',
-      py_modules=['obviate'],
+      py_modules=['makeup'],
       keywords=[
             'machine learning', 'data science', 'make', 'models'
       ],
       # license='',
       # packages=['distutils', 'distutils.command'],
-      # scripts=['bin/obviate']
+      # scripts=['bin/makeup']
 )

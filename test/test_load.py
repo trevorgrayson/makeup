@@ -1,4 +1,4 @@
-from obviate import delegate as obv
+from makeup import delegate as obv
 
 
 def load():

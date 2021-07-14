@@ -1,4 +1,4 @@
-from obviate.deps import DEPS, target, default, run
+from makeup.deps import DEPS, target, default, run
 from examples import example1 as model
 
 

@@ -1,4 +1,4 @@
-from obviate import target
+from makeup import target
 
 load = "file:./test/fixtures/data.tsv"
 
