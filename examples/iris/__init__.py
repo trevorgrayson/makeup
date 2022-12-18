@@ -8,7 +8,7 @@ from sklearn import datasets
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def load(**kwargs):
+def load():
     """
     "Get the data" this sparse function allows a framework
     to be able to swap out different data sets easily.
@@ -17,13 +17,13 @@ def load(**kwargs):
     return iris_X, iris_y
 
 
-def features(X, y, **kwargs):
+def features(X, y):
     """Optional method to transform data, add or remove columns"""
     # if i had pandas here, I would do something!
     return X, y
 
 
-def split(X, y, **kwargs):
+def split(X, y):
     np.random.seed(0)
     indices = np.random.permutation(len(X))
     X_train = X[indices[:-10]]
@@ -35,7 +35,7 @@ def split(X, y, **kwargs):
            (X_test, y_test)
 
 
-def train(X, y, **kwargs):
+def train(X, y):
     """Create and fit a nearest-neighbor classifier"""
     model = KNeighborsClassifier()
     model.fit(X, y)
@@ -43,5 +43,5 @@ def train(X, y, **kwargs):
     return model
 
 
-def predict(model, X, **kwargs):
+def predict(model, X):
     return model.predict(X)

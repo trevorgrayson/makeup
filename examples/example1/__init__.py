@@ -10,11 +10,11 @@ def load():
     ]
 
 
-def features(rows, **kw):
+def features(rows):
     return [(row[0]*10, row[1]) for row in rows]
 
 
-def train(features, **kw):
+def train(features):
     """arbitrary return"""
     return features[0]
 

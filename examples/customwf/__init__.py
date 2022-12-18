@@ -13,11 +13,11 @@ def load():
     ]
 
 
-def thenthis(rows, **kw):
+def thenthis(rows):
     return [(row[0]*10, row[1]) for row in rows]
 
 
-def alsothis(features, **kw):
+def alsothis(features):
     """arbitrary return"""
     return features[0]
 
